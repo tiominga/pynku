@@ -1,0 +1,91 @@
+{%extends "main.html"%}
+{% load static %}
+
+{% block 'head'%}
+  <meta name="csrf-token" content="{{ csrf_token }}">
+{% endblock %}
+
+{% block 'body'%}
+<body onload="connection_list()">
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+
+    <div class="border rounded p-4 shadow" style="border-color: silver; width: 100%; max-width: 500px; background-color: white;">
+      <div class="text-center mb-4">
+        <img src="https://cdn-icons-png.flaticon.com/512/4248/4248443.png" alt="Database icon" style="width: 64px;">
+        <h4 class="mt-2">Connect to Database</h4>
+      </div>
+      <form id="form_connection" name="form_connection" method="post" action="{% url 'connection:save' %}">
+        {% if error %}
+          <div class="alert alert-danger" role="alert">
+            {{ error }}
+          </div>
+        {% endif %}
+        {% if success %}
+          <div class="alert alert-success" role="alert">
+            {{ success }}
+          </div>
+        {% endif %}
+        {% csrf_token %}
+        <div class="mb-3">
+
+          <label for="project" class="form-label">Project:</label>
+
+          <div style="position: relative; min-height: 42px;">
+            <!-- Fild text with the project name -->
+            <div id="project_add" style="display: none; position: absolute; top: 0; left: 0; right: 110px;">
+              <div class="input-group">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Project Alias...">
+                <button type="button" class="btn btn-outline-secondary" title="Cancelar" onclick="connection_select()">×</button>
+              </div>
+            </div>
+            
+        
+            <!-- Field combo with teh project name -->
+            <div id="project_add_combo" style="display: block; position: absolute; top: 0; left: 0; right: 110px;">
+              <div class="input-group" id="project_add_combo" >
+
+                <select class="form-select w-50 me-2" id="select_name" name="select_name" onchange="connection_change(this.value)">
+                 
+                </select>
+          
+                <button type="button" class="btn btn-primary" title="Add Project" onClick="connection_new()">+</button>
+                <button type="button" class="btn btn-danger ms-2" title="Remove this Project" onclick="connection_delete();">−</button>
+
+              </div>
+            </div>
+
+          </div>
+           
+        </div>
+          
+          <div class="mb-3">            
+            <input type="hidden" class="form-control" id="id" name="id" value="">
+          </div>  
+        <div class="mb-3">
+          <label for="host" class="form-label">Host</label>
+          <input type="text" class="form-control" id="host" name="host" value="localhost">
+        </div>
+        <div class="mb-3">
+          <label for="port" class="form-label">Port</label>
+          <input type="number" class="form-control" id="port" name="port" value="3306">
+        </div>
+        <div class="mb-3">
+          <label for="user" class="form-label">User</label>
+          <input type="text" class="form-control" id="user" name="user">
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password" onfocus="liveToast('bg-danger','Please, just save the password if you are in a localhost, I beg...');">
+        </div>
+        <div class="mb-3">
+          <label for="database" class="form-label">Database Name</label>
+          <input type="text" class="form-control" id="database" name="database">
+        </div>
+        <button type="button" class="btn btn-primary w-100" onclick="connection_save();">Connect</button>
+      </form>
+    </div>
+  </div>
+
+
+<script src="{% static 'home/index.js' %}"></script>
+{% endblock %}
