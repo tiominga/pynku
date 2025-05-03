@@ -1,11 +1,11 @@
 {%extends "main.html"%}
 {% load static %}
 
-{% block 'head'%}
+{% block head%}
   <meta name="csrf-token" content="{{ csrf_token }}">
 {% endblock %}
 
-{% block 'body'%}
+{% block body%}
 <body onload="connection_list()">
 <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
 
@@ -71,17 +71,17 @@
         </div>
         <div class="mb-3">
           <label for="user" class="form-label">User</label>
-          <input type="text" class="form-control" id="user" name="user">
+          <input type="text" class="form-control" id="user" name="user" autocomplete="username">
         </div>
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password" name="password" onfocus="liveToast('bg-danger','Please, just save the password if you are in a localhost, I beg...');">
+          <input type="password" class="form-control" id="password" name="password" autocomplete="current-password" onfocus="liveToast('bg-danger','Please, just save the password if you are in a localhost, I beg...');">
         </div>
         <div class="mb-3">
           <label for="database" class="form-label">Database Name</label>
           <input type="text" class="form-control" id="database" name="database">
         </div>
-        <button type="button" class="btn btn-primary w-100" onclick="connection_save();">Connect</button>
+        <button type="button" id="bt_connect" class="btn btn-primary w-100" onclick="connection_save();">Connect</button>
       </form>
     </div>
   </div>

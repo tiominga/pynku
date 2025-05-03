@@ -1,0 +1,68 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# Python environment files
+.Python
+
+# Django stuff:
+db.sqlite3
+*.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.db
+media/
+staticfiles/
+static/
+bin/
+lib64/
+
+# Django secret settings (caso use dotenv ou arquivos locais)
+.env.*
+*.env
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Test coverage
+htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+
+# Pytest cache
+.pytest_cache/
+
+# Migrations (opcional — com cuidado!)
+# */migrations/*.py
+# !*/migrations/__init__.py
+
+# Build files
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# pip tools
+pip-log.txt
+pip-delete-this-directory.txt

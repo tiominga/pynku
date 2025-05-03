@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from .models import Connection
@@ -51,16 +51,24 @@ def connection_save(request):
         user = request.POST.get('user')
         password = request.POST.get('password')
         database = request.POST.get('database')
+        id = request.POST.get('id')
 
-        # Create a new Connection object
-        connection = Connection(
-            name=name,
-            host=host,
-            port=port,
-            user=user,
-            password=password,
-            database=database
-        )
-        connection.save()
+        if id:
+            obj_connection = Connection.objects.get(id=id)
+        else:
+            obj_connection = Connection()    
+           
+        obj_connection.name = name
+        obj_connection.host = host
+        obj_connection.port = port
+        obj_connection.user = user
+        obj_connection.password = password
+        obj_connection.database = database
+        
 
-    return render(request, 'connection/connection.html')
+        obj_connection.save() 
+
+        request.session['id_connection'] = obj_connection.id   
+         
+
+    return redirect('editor:editor')
