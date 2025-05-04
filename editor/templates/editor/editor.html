@@ -1,22 +1,82 @@
-
 {% extends "main.html" %}
 
-{% load static %}
-
 {% block head %}
-<!-- Você pode colocar CSS ou JS específicos aqui -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'editor/editor.css' %}?=5.0.0">
+  
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- CodeMirror CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/eclipse.min.css">
+
 {% endblock %}
 
 {% block body %}
-<h1>OI por que não apareço?</h1>
-{% if arr_tables %}
-  <ul>
-    {% for table in arr_tables %}
-      <li>{{ table.0 }}</li>
-    {% endfor %}
-  </ul>
-{% else %}
-  <p>Nenhuma tabela encontrada ou erro de conexão.</p>
-{% endif %}
+<!-- main window-->
+<div class="sql-layout pt-4">
 
+  <!-- Left  -->
+  <div class="left-panel bg-light">     
+    {% if arr_tables %}
+        <ul class="table-list">
+        {% for table in arr_tables %}
+            <li class="table-item">{{ table.0 }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tables or connction error.</p>
+    {% endif %}
+  </div>
+
+  <!-- Main panel -->
+  <div class="main-panel">
+
+    <!-- Query result -->
+    <div class="result-container" id="query-result">
+      <p><i>Resultado da consulta aparecerá aqui.</i></p>
+    </div>
+
+    <!-- SQL Editor -->
+    <div class="editor-container">
+      <textarea id="sql-editor">SELECT * FROM usuarios;</textarea>
+    </div>
+
+    <!-- History -->
+    <div class="history-panel">
+      <div class="history-panel-content">
+        <h5>Histórico</h5>
+        <ul id="sql-history">
+          <li>SELECT * FROM usuarios;</li>
+          <li>SELECT COUNT(*) FROM produtos;</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/sql/sql.min.js"></script>
+
+<script>
+  // CodeMirror
+  const editor = CodeMirror.fromTextArea(document.getElementById("sql-editor"), {
+    mode: "text/x-sql",
+    theme: "eclipse",
+    lineNumbers: true,
+    autofocus: true,
+    extraKeys: { "Ctrl-Space": "autocomplete" }
+  });
+</script>
+
+
+{% endblock %}
+{% block footer %}
+© pynku 2025 - By TioMinga
 {% endblock %}
