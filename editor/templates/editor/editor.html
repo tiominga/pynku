@@ -2,9 +2,11 @@
 
 {% block head %}
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="csrf-token" content="{{ csrf_token }}">
 
 {% load static %}
 <link rel="stylesheet" href="{% static 'editor/editor.css' %}?=5.0.0">
+<script src="{% static 'editor/editor.js' %}"></script>
   
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -20,7 +22,19 @@
 <div class="sql-layout pt-4">
 
   <!-- Left  -->
-  <div class="left-panel bg-light">     
+  <div class="left-panel bg-light"> 
+
+     <!-- Bar with button exec sql -->
+  <div class="d-flex align-items-center justify-content-between mb-2 px-2 py-1 border-bottom" style="background-color: #e9ecef;">
+    <span class="fw-bold"><lable id="lb_dtabase_name">{{database_name}}</lable></span>
+    <button class="btn btn-sm btn-outline-primary" title="Refresh">
+      <i class="bi bi-arrow-clockwise"></i>      
+    </button>
+
+    <button class="btn btn-sm btn-outline-primary" title="Run SQL" onclick="exec_sql(); return false;">
+      <i class="bi bi-lightning-fill"></i>
+    </button>
+  </div>    
     {% if arr_tables %}
         <ul class="table-list">
         {% for table in arr_tables %}
@@ -42,7 +56,7 @@
 
     <!-- SQL Editor -->
     <div class="editor-container">
-      <textarea id="sql-editor">SELECT * FROM usuarios;</textarea>
+      <textarea id="sql-editor"></textarea>
     </div>
 
     <!-- History -->
