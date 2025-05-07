@@ -1,13 +1,15 @@
 from django.db import connections
 from django.utils.html import escape
 from django.urls import reverse
+from connection.models import Connection
+from pynku.utils.db_connection import get_connection
 
 class SqlToTable:
     def __init__(self):
         self.query = None
         self.params = None
-        self.edit_rout = None  # Ex: 'form' (name da URL)
-        self.delete_rout = None  # Ex: 'delete_viagem'
+        self.edit_rout = None
+        self.delete_rout = None
 
     def set_query(self, query):
         self.query = query
@@ -21,54 +23,49 @@ class SqlToTable:
     def set_delete_rout(self, delete_rout):
         self.delete_rout = delete_rout
 
-    def execute_query(self):
-        with connections['default'].cursor() as cursor:
-            cursor.execute(self.query, self.params)
+    def execute_query(self, request):
+        cursor = get_connection(request)
+        try:
+            cursor.execute(self.query, self.params or [])
+        except Exception as e:
+            return str(e) 
+
+        try:
             result = cursor.fetchall()
             columns = [desc[0] for desc in cursor.description]
-        return result, columns
+            return result, columns
+        except:
+            return "Success..."
 
     def get_buttons(self, id_value):
-        buttons = ""
+       
+        return ""
 
-        if self.edit_rout is not None:
-            edit_url = reverse(self.edit_rout, kwargs={'id': id_value})
-            buttons += f'<a href="{edit_url}" class="btn btn-primary btn-sm mr-2" style="padding: 0.2rem 0.4rem;">Alterar</a>'
+    def query_to_html(self, request):
+        resultado = self.execute_query(request)
 
-        if self.delete_rout is not None:
-            delete_url = reverse(self.delete_rout, kwargs={'id': id_value})
-            buttons += f'<a href="{delete_url}" class="btn btn-danger btn-sm" style="padding: 0.2rem 0.4rem;">Excluir</a>'
+        if isinstance(resultado, str):
+            # Verifica se a mensagem parece ser um erro (pode ajustar essa lógica se quiser)
+            if "error" in resultado.lower() or "syntax" in resultado.lower():
+                return f"<div class='alert alert-danger'>{escape(resultado)}</div>"
+            else:
+                return f"<div style='background-color: #007bff; color: white; padding: 10px; border-radius: 5px;'>{escape(resultado)}</div>"
 
-        return buttons
+        result, columns = resultado
 
-    def query_to_html(self):
-        result, columns = self.execute_query()
-
-        # Índice da coluna "id"
-        try:
-            id_index = columns.index("id")
-        except ValueError:
-            raise Exception("A consulta SQL deve retornar uma coluna chamada 'id'.")
-
-        # Criando a tabela HTML com Bootstrap
+        # Renderiza a tabela normalmente
         table_html = '<table class="table table-bordered table-striped">'
-
-        # Cabeçalhos
         table_html += '<thead><tr>'
         for column in columns:
             table_html += f'<th>{escape(column)}</th>'
-        table_html += '<th>Ações</th></tr></thead>'
+        table_html += '</tr></thead><tbody>'
 
-        # Corpo da tabela
-        table_html += '<tbody>'
         for row in result:
             table_html += '<tr>'
             for column in row:
                 table_html += f'<td>{escape(str(column))}</td>'
-
-            row_id = row[id_index]
-            buttons = self.get_buttons(row_id)
-            table_html += f'<td>{buttons}</td></tr>'
+            table_html += '</tr>'
         table_html += '</tbody></table>'
 
         return table_html
+

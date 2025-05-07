@@ -38,7 +38,12 @@
     {% if arr_tables %}
         <ul class="table-list">
         {% for table in arr_tables %}
-            <li class="table-item">{{ table.0 }}</li>
+            <li class="table-item" onclick="alert('Table: {{ table.0 }}')">
+              <label class="w-100 m-0">
+                <input type="radio" name="tabela" value="{{ table.0 }}" class="form-check-input me-2">
+                {{ table.0 }}
+              </label>
+            </li>            
         {% endfor %}
         </ul>
     {% else %}
