@@ -40,7 +40,7 @@
         {% for table in arr_tables %}
             <li class="table-item" onclick="exec_sql('DESCRIBE {{ table.0 }}')" ondblclick="exec_sql('SELECT * FROM {{ table.0 }} limit 15');event.stopPropagation()">
               <label class="w-100 m-0">
-                <input type="radio" name="rb_table" value="{{ table.0 }}" class="form-check-input me-2">
+                <input type="radio" name="rb_table" value="{{ table.0 }}" class="form-check-input me-2" checked>
                 {{ table.0 }}
                <button class="btn btn-sm btn-outline-primary float-end" title="Select * from limit 15" onclick="exec_sql('SELECT * FROM {{ table.0 }} order by 1 desc limit 15');event.stopPropagation()">
                   <i class="bi bi-list"></i>      
