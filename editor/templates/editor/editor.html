@@ -38,10 +38,13 @@
     {% if arr_tables %}
         <ul class="table-list">
         {% for table in arr_tables %}
-            <li class="table-item" onclick="alert('Table: {{ table.0 }}')">
+            <li class="table-item" onclick="exec_sql('DESCRIBE {{ table.0 }}')" ondblclick="exec_sql('SELECT * FROM {{ table.0 }} limit 15');event.stopPropagation()">
               <label class="w-100 m-0">
-                <input type="radio" name="tabela" value="{{ table.0 }}" class="form-check-input me-2">
+                <input type="radio" name="rb_table" value="{{ table.0 }}" class="form-check-input me-2">
                 {{ table.0 }}
+               <button class="btn btn-sm btn-outline-primary float-end" title="Select * from limit 15" onclick="exec_sql('SELECT * FROM {{ table.0 }} order by 1 desc limit 15');event.stopPropagation()">
+                  <i class="bi bi-list"></i>      
+                </button>
               </label>
             </li>            
         {% endfor %}
@@ -56,7 +59,7 @@
 
     <!-- Query result -->
     <div class="result-container" id="query-result">
-      <p><i>Resultado da consulta aparecerá aqui.</i></p>
+      <p><i>I'm not a sql client...</i></p>
     </div>
 
     <!-- SQL Editor -->

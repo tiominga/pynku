@@ -21,7 +21,8 @@ app_name = 'editor'
 
 urlpatterns = [
        path('editor',views.editor_index,name='editor'), 
-       path('get_table',views.get_table,name='get_table'),         
+       path('get_table',views.get_table,name='get_table'),
+       path('get_model',views.get_model,name='get_model'),              
       
 ] 
 
