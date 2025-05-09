@@ -8,61 +8,44 @@ venv/
 env/
 .venv/
 .env/
-
-# Python environment files
 .Python
 
-# Django stuff:
-db.sqlite3
-*.sqlite3
-*.log
-*.pot
-*.pyc
-*.pyo
-*.pyd
-*.db
-media/
-staticfiles/
-static/
-bin/
-lib64/
-
-# Django secret settings (caso use dotenv ou arquivos locais)
+# Django environment / secret settings
 .env.*
 *.env
 
-# IDEs and editors
+# SQLite database (ajuste se usar outro)
+*.sqlite3
+db.sqlite3
+
+# IDEs e editores
 .vscode/
 .idea/
 *.sublime-workspace
 *.sublime-project
+bin/
+lib/
+lib64/
+pyvenv.cfg
+*.pyc
+__pycache__/
 
-# System files
+# Arquivos de sistema
 .DS_Store
 Thumbs.db
 
-# Test coverage
-htmlcov/
+# Testes e cobertura
 .coverage
 .coverage.*
 .cache
+htmlcov/
 nosetests.xml
 coverage.xml
 *.cover
-
-# Pytest cache
 .pytest_cache/
 
-# Migrations (opcional — com cuidado!)
-# */migrations/*.py
-# !*/migrations/__init__.py
-
-# Build files
+# Build e distribuição
 build/
 dist/
 *.egg-info/
 .eggs/
-
-# pip tools
-pip-log.txt
-pip-delete-this-directory.txt
