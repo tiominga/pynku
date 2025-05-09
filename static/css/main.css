@@ -1,0 +1,22 @@
+.footer_index {
+    position: fixed;
+    width: 100%;
+    height: 30px;  /* ou 2rem, se quiser */
+    bottom: 0;
+    background-color: #f1f1f1;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+ .footer_text{
+
+     left:0%;
+
+ }
+
+main {
+    padding-top: 26px; /* ajuste conforme a altura da sua navbar */
+}

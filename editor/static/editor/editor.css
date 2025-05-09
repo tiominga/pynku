@@ -1,0 +1,114 @@
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+  .sql-layout {
+    display: flex;
+    height: calc(100vh - 56px); /* Ajusta abaixo da navbar */
+  }
+  
+  .left-panel {
+    min-width: 150px;
+    width: 250px;
+    resize: horizontal;
+    overflow: auto;
+    border-right: 1px solid #ccc;
+    padding: 10px;
+  }
+  
+  .main-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column-reverse; /* inverte editor/resultados */
+    position: relative;
+  }
+  
+  .result-container {
+    height: 66%; /* Isso controla a altura inicial da div de resultados */
+    min-height: 100px;
+    max-height: 80%;
+    resize: vertical; /* Permite redimensionamento vertical */
+    overflow: auto;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    background: #ffffff;
+    box-sizing: border-box; /* Certifique-se de que o padding não afete a altura total */
+  }
+  
+  .editor-container {
+    flex: 1;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .history-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 12px;
+    height: 100%;
+    background-color: #f8f9fa;
+    overflow-x: hidden;
+    transition: width 0.3s ease;
+    border-left: 1px solid #ccc;
+    z-index: 1000;
+  }
+  
+  .history-panel:hover {
+    width: 250px;
+  }
+  
+  .history-panel-content {
+    opacity: 0;
+    padding: 10px;
+    transition: opacity 0.3s ease;
+  }
+  
+  .history-panel:hover .history-panel-content {
+    opacity: 1;
+  }
+  
+  .navbar {
+    z-index: 1050;
+  }
+/* list */
+ul.table-list {
+  list-style-type: none; /* Remove os marcadores padrão */
+  padding: 0;
+  margin: 0;
+}
+
+/* Estilo para os itens da lista */
+ul.table-list .table-item {
+  padding: 8px 15px; /* Reduzi o padding para diminuir o espaço */
+  margin: 4px 0; /* Reduzi a margem para diminuir o espaço */
+  background-color: white; /* Cor do fundo */
+  color: black; /* Cor do texto */
+  font-weight: bold;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer; /* Mãozinha ao passar o mouse */
+}
+
+/* Efeito ao passar o mouse */
+ul.table-list .table-item:hover {
+  background-color: #ccc; /* Cor de fundo ao passar o mouse */
+  transform: none; /* Removi o efeito de deslizar */
+}
+
+/* Barra à esquerda */
+ul.table-list .table-item:before {
+  content: "";
+  display: block;
+  height: 100%;
+  width: 4px; /* Espessura da barra */
+  background-color: #666; /* Cor da barra */
+  margin-right: 10px;
+}
+
+#query-result {
+  font-family: monospace;
+  white-space: pre;
+}
