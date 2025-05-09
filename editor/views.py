@@ -8,12 +8,6 @@ from pynku.utils.sql_to_table import SqlToTable
 from pynku.utils.db_connection import get_connection
 import re
 
-def get_table_query(query):
-    obj_sql_to_table = SqlToTable()
-    obj_sql_to_table.set_query(query)    
-    html_table = obj_sql_to_table.query_to_html()    
-    return html_table
-
 
 def get_table(request):
     obj_sql_to_table = SqlToTable()

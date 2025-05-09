@@ -1,0 +1,80 @@
+Watching for file changes with StatReloader
+[09/May/2025 16:45:14] "GET / HTTP/1.1" 200 6698
+[09/May/2025 16:45:14] "GET /static/js/pynku.js HTTP/1.1" 304 0
+[09/May/2025 16:45:14] "GET /static/css/main.css HTTP/1.1" 304 0
+[09/May/2025 16:45:14] "GET /static/home/index.js HTTP/1.1" 304 0
+[09/May/2025 16:45:14] "GET /connection/list/ HTTP/1.1" 200 384
+Not Found: /favicon.ico
+[09/May/2025 16:45:14] "GET /favicon.ico HTTP/1.1" 404 2744
+[09/May/2025 16:47:03] "POST /connection/save/ HTTP/1.1" 302 0
+[09/May/2025 16:47:03] "GET /editor/editor HTTP/1.1" 200 93554
+[09/May/2025 16:47:03] "GET /static/editor/editor.css?=5.0.0 HTTP/1.1" 200 2611
+[09/May/2025 16:47:03] "GET /static/editor/editor.js HTTP/1.1" 200 874
+[09/May/2025 16:47:23] "POST /editor/get_table HTTP/1.1" 200 6158
+[09/May/2025 16:55:17] "POST /editor/get_table HTTP/1.1" 200 296
+[09/May/2025 16:55:23] "POST /editor/get_table HTTP/1.1" 200 6073
+[09/May/2025 17:23:22] "POST /editor/get_table HTTP/1.1" 200 5231
+[09/May/2025 17:23:23] "POST /editor/get_table HTTP/1.1" 200 5231
+[09/May/2025 17:23:24] "POST /editor/get_table HTTP/1.1" 200 5231
+[09/May/2025 17:23:24] "POST /editor/get_table HTTP/1.1" 200 5231
+[09/May/2025 17:23:24] "POST /editor/get_table HTTP/1.1" 200 5231
+[09/May/2025 17:23:34] "POST /editor/get_table HTTP/1.1" 200 373
+[09/May/2025 17:24:03] "POST /editor/get_table HTTP/1.1" 200 2717
+Not Found: /favicon.ico
+[09/May/2025 17:24:06] "GET /favicon.ico HTTP/1.1" 404 2744
+Internal Server Error: /editor/get_model
+Traceback (most recent call last):
+  File "/mnt/c/projetos/python/pynku/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/projetos/python/pynku/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/projetos/python/pynku/editor/views.py", line 81, in get_model
+    size = size_match.group(1)
+           ^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+[09/May/2025 17:24:06] "POST /editor/get_model HTTP/1.1" 500 71690
+[09/May/2025 17:24:46] "POST /editor/get_table HTTP/1.1" 200 373
+[09/May/2025 17:24:46] "POST /editor/get_table HTTP/1.1" 200 373
+Internal Server Error: /editor/get_model
+Traceback (most recent call last):
+  File "/mnt/c/projetos/python/pynku/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/projetos/python/pynku/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/projetos/python/pynku/editor/views.py", line 81, in get_model
+    size = size_match.group(1)
+           ^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'
+[09/May/2025 17:24:52] "POST /editor/get_model HTTP/1.1" 500 65912
+[09/May/2025 17:25:05] "POST /editor/get_table HTTP/1.1" 200 373
+[09/May/2025 17:26:15] "POST /connection/save/ HTTP/1.1" 302 0
+[09/May/2025 17:26:15] "GET /editor/editor HTTP/1.1" 200 5548
+[09/May/2025 17:26:33] "POST /connection/save/ HTTP/1.1" 302 0
+[09/May/2025 17:26:33] "GET /editor/editor HTTP/1.1" 200 5548
+[09/May/2025 18:38:46] "POST /connection/save/ HTTP/1.1" 302 0
+[09/May/2025 18:38:54] "GET / HTTP/1.1" 200 6698
+[09/May/2025 18:38:54] "GET /connection/list/ HTTP/1.1" 200 431
+[09/May/2025 18:46:03] "POST /connection/save/ HTTP/1.1" 302 0
+[09/May/2025 18:46:03] "GET /editor/editor HTTP/1.1" 200 5547
+[09/May/2025 18:46:17] "GET / HTTP/1.1" 200 6698
+[09/May/2025 18:46:17] "GET /connection/list/ HTTP/1.1" 200 423
+[09/May/2025 18:46:19] "GET / HTTP/1.1" 200 6698
+[09/May/2025 18:46:19] "GET /static/css/main.css HTTP/1.1" 200 393
+[09/May/2025 18:46:19] "GET /static/js/pynku.js HTTP/1.1" 200 1156
+[09/May/2025 18:46:19] "GET /static/home/index.js HTTP/1.1" 200 3292
+Not Found: /favicon.ico
+[09/May/2025 18:46:19] "GET /connection/list/ HTTP/1.1" 200 423
+[09/May/2025 18:46:19] "GET /favicon.ico HTTP/1.1" 404 2744
+[09/May/2025 18:46:33] "POST /connection/save/ HTTP/1.1" 302 0
+[09/May/2025 18:46:33] "GET /editor/editor HTTP/1.1" 200 5544
+[09/May/2025 18:46:37] "GET / HTTP/1.1" 200 6698
+[09/May/2025 18:46:37] "GET /static/js/pynku.js HTTP/1.1" 200 1156
+[09/May/2025 18:46:37] "GET /static/css/main.css HTTP/1.1" 200 393
+[09/May/2025 18:46:37] "GET /static/home/index.js HTTP/1.1" 200 3292
+Not Found: /favicon.ico
+[09/May/2025 18:46:37] "GET /favicon.ico HTTP/1.1" 404 2744
+[09/May/2025 18:46:37] "GET /connection/list/ HTTP/1.1" 200 354

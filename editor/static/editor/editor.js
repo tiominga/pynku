@@ -2,7 +2,35 @@ function getCsrfToken() {
     return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 }
 
+function history_click(sql) {
 
+    exec_sql(sql);
+    editor.setValue(sql);
+
+}    
+
+function sql_string_works(sql) {
+
+    sql = sql.trim();
+    sql = sql.replace(/\s+/g, ' '); // Remove extra spaces 
+    sql = sql.substring(0, 50); // Limit to 1000 characters 
+    return sql;
+
+}    
+
+function add_history(sql) {
+  
+ sql_view = sql_string_works(sql);   
+ const ul = document.getElementById("sql-history");
+ const li = document.createElement("li");
+ li.textContent = sql_view;
+ li.dataset.sql = sql;
+ li.addEventListener("click", () => history_click(sql));
+ li.className = "sql-history-item";
+ li.title = sql;
+ ul.insertBefore(li,ul.firstChild);   
+
+}
 
 function exec_sql(sql){
     
@@ -23,6 +51,13 @@ function exec_sql(sql){
         const tableHtml = data.html; 
         console.log(tableHtml); // Log the HTML to the console for debugging               
         document.getElementById('query-result').innerHTML = tableHtml;
+
+        let editor_text = editor.getValue();
+        if (editor_text.length == 0) {
+           editor.setValue(sql); 
+        }
+
+        add_history(sql);
     })
     .catch(error => {
         console.error('Error:', error);
