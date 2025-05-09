@@ -1,5 +1,5 @@
 import MySQLdb
-from MySQLdb import Error as MySQLError
+MySQLError = MySQLdb.MySQLError  # Explicitly access MySQLError from MySQLdb
 from connection.models import Connection
 
 def get_connection(request):
