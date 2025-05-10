@@ -75,7 +75,11 @@
         </div>
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password" name="password" autocomplete="current-password" onfocus="liveToast('bg-danger','Please, just save the password if you are in a localhost, I beg...');">
+          <input type="password" class="form-control" id="password" name="password" autocomplete="current-password">
+        </div>
+        <div class="mb-3">          
+          <input type="checkbox"  id="save_password" name="save_password" onclick="liveToast('bg-danger','Please, just save the password if you are in a localhost, I beg...');">
+          <label for="save_password" class="form-label">Save the Password</label>
         </div>
         <div class="mb-3">
           <label for="database" class="form-label">Database Name</label>

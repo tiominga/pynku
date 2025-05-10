@@ -3,7 +3,10 @@ import MySQLdb
 from connection.models import Connection
 
 def get_connection(request):
-    id_connection = request.session.get('id_connection')   
+    id_connection = request.session.get('id_connection')
+    password = request.session.get('password')
+
+   
     obj_connection = Connection.objects.filter(id=id_connection).first()
 
     if obj_connection:
@@ -12,7 +15,7 @@ def get_connection(request):
                 host=obj_connection.host,
                 port=obj_connection.port,
                 user=obj_connection.user,
-                passwd=obj_connection.password,
+                passwd=password,
                 db=obj_connection.database
             )
             connection.autocommit(True)

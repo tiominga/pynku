@@ -45,6 +45,7 @@ def editor_index(request):
 
 def query_to_json(request,query):
     cursor = get_connection(request)
+    
     if cursor:
         try:
             cursor.execute(query)
@@ -63,23 +64,28 @@ def query_to_json(request,query):
     
 def get_model(request):
     table_name = request.POST.get("table_name")   
-    query = f"describe {table_name}"       
-    json = query_to_json(request,query)  
+    query = f"describe {table_name}"           
+    json = query_to_json(request,query) 
+
+    print(json) 
    
     model_text = f"class {table_name}(models.Model):"
     for row in json:
         field_name = row['Field']
         field_type = row['Type']
 
+        
         size_match = re.search(r'\((.*?)\)', field_type)
-        size = size_match.group(1)
+        size = size_match.group(1) if size_match else None
+
+
 
         print(size)
     
-        if size.isdigit():
+        if size and size.isdigit():
             size = f"max_length={size}"
         else:
-            size = " "
+            size = ""
 
 
         if 'int' in field_type and not 'tinyint' in field_type and not 'smallint' in field_type and not 'mediumint' in field_type and not 'bigint' in field_type:

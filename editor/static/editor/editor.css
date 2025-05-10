@@ -30,6 +30,8 @@ html, body {
 
 
 .result-container {
+  font-family: monospace;
+  white-space: pre;
   flex: 2; /* 2 partes */
   min-height: 66%;
   resize: vertical;

@@ -52,6 +52,9 @@ def connection_save(request):
         password = request.POST.get('password')
         database = request.POST.get('database')
         id = request.POST.get('id')
+        save_password = request.POST.get('save_password') is not None
+
+        print("save_password", save_password)
 
         if id:
             obj_connection = Connection.objects.get(id=id)
@@ -62,13 +65,19 @@ def connection_save(request):
         obj_connection.host = host
         obj_connection.port = port
         obj_connection.user = user
-        obj_connection.password = password
+
+        if save_password:
+            obj_connection.password = password
+        else:
+            obj_connection.password = ""
+
         obj_connection.database = database
         
 
         obj_connection.save() 
 
-        request.session['id_connection'] = obj_connection.id   
+        request.session['id_connection'] = obj_connection.id 
+        request.session['password'] = password
          
-
+         
     return redirect('editor:editor')
