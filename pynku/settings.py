@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'connection',
     'home',
     'editor',
+    'django_extensions',
     
 ]
 
