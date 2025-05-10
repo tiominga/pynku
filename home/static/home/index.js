@@ -66,6 +66,8 @@ function connection_new(){
 
     f_orm = document.getElementById('form_connection');    
     f_orm.reset();
+    document.getElementById('id').value = '';
+
     document.getElementById('project_add').style.display = 'block';
     document.getElementById('project_add_combo').style.display = 'none';
 
