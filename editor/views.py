@@ -31,8 +31,7 @@ def editor_index(request):
         try:
             cursor.execute("SHOW TABLES")
             arr_tables = cursor.fetchall()
-            for table in arr_tables:
-                print(table[0])
+           
         except MySQLdb.Error as e:
             print(f"Error executing query: {e}")
         finally:
@@ -66,8 +65,6 @@ def get_model(request):
     table_name = request.POST.get("table_name")   
     query = f"describe {table_name}"           
     json = query_to_json(request,query) 
-
-    print(json) 
    
     model_text = f"class {table_name}(models.Model):"
     for row in json:
@@ -78,10 +75,6 @@ def get_model(request):
         size_match = re.search(r'\((.*?)\)', field_type)
         size = size_match.group(1) if size_match else None
 
-
-
-        print(size)
-    
         if size and size.isdigit():
             size = f"max_length={size}"
         else:
