@@ -137,4 +137,88 @@ def get_model(request):
             model_text += f"\n    {field_name} = models.CharField(max_length=255)"
 
     return HttpResponse(model_text, content_type='text/plain')
+
+def get_head(request):
+    head = """
+    from django.shortcuts import redirect, get_object_or_404
+    from django.http import JsonResponse
+    from django.views.decorators.http import require_POST
+    from .models import Connection
+    import json\n\n
+    """
+
+    return head
+
+
+
+
+def get_save(request): 
+     
+    table_name = request.POST.get("table_name")
+    table_name_capitalized = table_name.capitalize()  
+    query = f"describe {table_name}"           
+    json = query_to_json(request,query) 
+
+    view_text = get_head(request)
+   
+    view_text += f"def {table_name}_save(request):\n"
+
+    view_text += "try:\n" 
+
+    for row in json:       
+        field_name = row['Field']   
+        view_text += f"    {field_name} = request.POST.get('{field_name}')\n"
+
+    view_text += "\n"
+    view_text += f"    if id:\n"
+    view_text += f"        obj_{table_name} =  get_object_or_404({table_name_capitalized},id=id)\n"
+    view_text += f"    else:\n"
+    view_text += f"        obj_{table_name} = {table_name_capitalized}()\n\n"
+
+    for row in json:
+        field_name = row['Field'] 
+        view_text += f"    obj_{table_name}.{field_name} = {field_name}\n"  
+        
+    view_text += "\n"
+    view_text += f"    obj_{table_name}.save()\n" 
+
+    view_text += "\n"
+    view_text += f"    return redirect('xxxxxxxx:xxxxxxxx')\n"
+
+    view_text += "except Exception as e:\n"
+
+    view_text += "    logging.error(f\"Error saving: {e}\")\n"
+    view_text += "    return HttpResponseServerError(\"Error saving...\")\n"
+
+    return view_text
+
+def get_delete(request):
+    table_name = request.POST.get("table_name")
+    table_name_capitalized = table_name.capitalize()  
+    query = f"describe {table_name}"           
+    json = query_to_json(request,query) 
+
+    view_text =  "@require_POST\n"
+    view_text += f"def {table_name}_delete(request):\n"
+    view_text += "try:\n"
+    view_text += "    data = json.loads(request.body)\n"
+    view_text += f"    {table_name}_id = data.get('id')\n"
+
+    view_text += f"    obj_{table_name} = {table_name_capitalized}.objects.get(id={table_name}_id)\n"
+    #view_text += f"    if obj_{table_name}:\n"
+    view_text += f"    obj_{table_name}.status = 0\n"
+    view_text += f"    obj_{table_name}.save()\n"
+    view_text += "     return JsonResponse({'return': 'success'}, safe=False)\n"
+    #view_text += "    else:\n"   
+    view_text += "except Exception as e:\n"
+    view_text += "     return JsonResponse({'error': str(e)}, status=400)"
+
+    return view_text    
+
     
+def get_view(request):
+    view_text = get_save(request)
+    view_text += "\n"
+    view_text += get_delete(request)
+
+    return HttpResponse(view_text, content_type='text/plain')

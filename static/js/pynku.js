@@ -37,4 +37,23 @@ function  liveToast(bg,message){
     })
     .catch(error => console.error('Erro:', error));
 }
+
+function editor_view(){
+    var selected_table = document.querySelector('input[name="rb_table"]:checked');
+    console.log(selected_table.value);
+    url = '/editor/get_view';
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: new URLSearchParams({ 'table_name': selected_table.value })
+    })
+    .then(response => response.text())
+    .then(text => {
+        document.getElementById('query-result').innerText = text;
+    })
+    .catch(error => console.error('Erro:', error));
+}
    

@@ -54,8 +54,6 @@ def connection_save(request):
         id = request.POST.get('id')
         save_password = request.POST.get('save_password') is not None
 
-        print("save_password", save_password)
-
         if id:
             obj_connection = Connection.objects.get(id=id)
         else:
