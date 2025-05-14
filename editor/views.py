@@ -65,8 +65,16 @@ def get_model(request):
     table_name = request.POST.get("table_name")   
     query = f"describe {table_name}"           
     json = query_to_json(request,query) 
+
+    model_text = """
+        from django.db import models
+        from django.core.exceptions import ValidationError
+        from django.contrib.auth.models import User
+        from datetime import date
+
+    """
    
-    model_text = f"class {table_name}(models.Model):"
+    model_text += f"class {table_name}(models.Model):"
     for row in json:
         field_name = row['Field']
         field_type = row['Type']
@@ -135,6 +143,15 @@ def get_model(request):
             model_text += f"\n    {field_name} = models.UUIDField()"
         else:
             model_text += f"\n    {field_name} = models.CharField(max_length=255)"
+
+    model_text += "    date_created = models.DateField(auto_now_add=True)\n"
+
+    model_text += """
+    def clean(self):
+       if self.xxxx =='':
+          raise ValidationError('The xxx field cannot be empty.')
+          
+    """
 
     return HttpResponse(model_text, content_type='text/plain')
 
