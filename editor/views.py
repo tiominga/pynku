@@ -142,9 +142,9 @@ def get_model(request):
         elif 'uuid' in field_type:
             model_text += f"\n    {field_name} = models.UUIDField()"
         else:
-            model_text += f"\n    {field_name} = models.CharField(max_length=255)\n"
+            model_text += f"\n    {field_name} = models.CharField(max_length=255)"
 
-    model_text += "    date_created = models.DateField(auto_now_add=True)\n"
+    model_text += "\n    date_created = models.DateField(auto_now_add=True)\n"
 
     model_text += """
     def clean(self):
@@ -156,12 +156,17 @@ def get_model(request):
     return HttpResponse(model_text, content_type='text/plain')
 
 def get_head(request):
-    head = """
-    from django.shortcuts import redirect, get_object_or_404
-    from django.http import JsonResponse
-    from django.views.decorators.http import require_POST
-    from .models import Connection
-    import json\n\n
+    table_name = request.POST.get("table_name").capitalize() 
+    head = f"""
+from django.shortcuts import redirect, get_object_or_404
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from .models import {table_name}
+from django.shortcuts import render
+import logging
+import json
+
+
     """
 
     return head
@@ -200,7 +205,7 @@ def get_save(request):
     view_text += f"        obj_{table_name}.save()\n" 
 
     view_text += "\n"
-    #view_text += f"    return redirect('xxxxxxxx:xxxxxxxx')\n"
+   
     view_text += "        return JsonResponse({'return': 'success', 'message': 'Saved successfully.'})\n\n"
 
     view_text += "    except Exception as e:"
@@ -209,10 +214,7 @@ def get_save(request):
         logging.error(f"Error saving: {e}")
         return JsonResponse({'error': str(e)}, status=500)\n
     """
-
-    #view_text += "    logging.error(f\"Error saving: {e}\")\n"
-    #view_text += "    return HttpResponseServerError(\"Error saving...\")\n"
-
+   
     return view_text
 
 def get_delete(request):
@@ -278,13 +280,17 @@ def get_js_save(request):
     function getCsrfToken() {
         return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     }
-
-    function save(){   
+    function getCsrfToken() {
+        return document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+}
     """
+
+    js_text += f"function save_{table_name}(){{" 
+    
     js_text += f"let formData = new FormData(document.getElementById('form_{table_name}'));\n"
     js_text += f"    fetch('/{table_name}/save/', "
     js_text += "{"
-
+    
     js_text += """
     
      method: 'POST',
@@ -323,10 +329,16 @@ def get_form(request):
     
     # Adiciona o link para o Bootstrap no cabeçalho e CSS personalizado
     form_html = f"""
+    {{% extends "main.html" %}}
+    {{% load static %}}
+    {{% block 'body' %}}
+
     <html>
     <head>
         <title>Formulário {table_name}</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <meta name="csrf-token" content="{{ csrf_token }}">
+        <script src="{{% static 'js/{table_name}_form.js' %}}"></script>
         <style>
             body {{
                 background-color: #f2f2f2;
@@ -346,6 +358,7 @@ def get_form(request):
                 <div class="col-md-8 form-container">
                     <h2 class="text-center mb-4">Formulário {table_name}</h2>
                     <form id='form_{table_name}' method='POST' action='/{table_name}/save/'>
+                    {{% csrf_token %}}
                         <div class='row'>
     """
     
@@ -368,7 +381,7 @@ def get_form(request):
         
         
         if 'id' in field_name.lower() or 'cod_id' in field_name.lower():
-            form_html += f"        <input type='hidden' id='{field_name}' name='{field_name}' value='{default_value}'>\n"
+            form_html += f"        <input type='hidden' id='{field_name}' name='{field_name}' value='null'>\n"
             continue
 
         if col_counter == columns:
@@ -429,7 +442,8 @@ def get_form(request):
     form_html += f"        <button type='submit' class='btn btn-primary'>Save</button>\n"
     form_html += f"    </div>\n"
     form_html += f"</div>\n"
-    form_html += "</form>\n</div>\n</div>\n</div>\n</body>\n</html>"
+    form_html += "</form>\n</div>\n</div>\n</div>\n</body>\n</html>\n"
+    form_html += "{% endblock %}"
 
     return HttpResponse(form_html, content_type='text/html')
 
