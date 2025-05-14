@@ -23,7 +23,9 @@ urlpatterns = [
        path('editor',views.editor_index,name='editor'), 
        path('get_table',views.get_table,name='get_table'),
        path('get_model',views.get_model,name='get_model'),
-       path('get_view',views.get_view,name='get_view'),              
+       path('get_view',views.get_view,name='get_view'),
+       path('get_js_view',views.get_js_view,name='get_js_view'),  
+       path('get_form',views.get_form,name='get_form'),            
       
 ] 
 
