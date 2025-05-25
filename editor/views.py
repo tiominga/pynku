@@ -62,7 +62,8 @@ def query_to_json(request,query):
    
     
 def get_model(request):
-    table_name = request.POST.get("table_name")   
+    table_name = request.POST.get("table_name") 
+    table_name_upper = table_name.capitalize()  
     query = f"describe {table_name}"           
     json = query_to_json(request,query) 
 
@@ -74,84 +75,111 @@ def get_model(request):
 
     """
    
-    model_text += f"class {table_name}(models.Model):"
+    model_text += f"class {table_name_upper}(models.Model):"
     for row in json:
         field_name = row['Field']
         field_type = row['Type']
+        default = row['Default']
+        null = row['Null']
 
-        
+        if (null == 'Yes'):
+            null = 'True'
+        else:
+            null = 'False'
+                
+
+        if default is not None and len(default)>0 and default != 'None':
+            if default.isnumeric():
+                default = f"db_default={default},default={default}"
+            else:
+                default = f"db_default='{default}',default='{default}'"    
+        else:            
+            default = f"blank={null}, null={null}"   
+
         size_match = re.search(r'\((.*?)\)', field_type)
         size = size_match.group(1) if size_match else None
 
+        need_max_length = field_type.split('(')[0].lower() in ["varchar", "char", "enum", "set", "binary", "varbinary"]
+
+
         if size and size.isdigit():
-            size = f"max_length={size}"
+            size = f"max_length={size}"            
         else:
-            size = ""
+            if need_max_length:
+             size = f"max_length=150"
+            else:
+             size==""    
 
 
         if 'int' in field_type and not 'tinyint' in field_type and not 'smallint' in field_type and not 'mediumint' in field_type and not 'bigint' in field_type:
-            model_text += f"\n    {field_name} = models.IntegerField()"
+            model_text += f"\n\t    {field_name} = models.IntegerField("
         elif 'tinyint' in field_type:
-            model_text += f"\n    {field_name} = models.BooleanField()"
+            model_text += f"\n\t    {field_name} = models.BooleanField("
         elif 'smallint' in field_type:
-            model_text += f"\n    {field_name} = models.SmallIntegerField()"
+            model_text += f"\n\t    {field_name} = models.SmallIntegerField("
         elif 'mediumint' in field_type:
-            model_text += f"\n    {field_name} = models.IntegerField()"
+            model_text += f"\n\t    {field_name} = models.IntegerField("
         elif 'bigint' in field_type:
-            model_text += f"\n    {field_name} = models.BigIntegerField()"
+            model_text += f"\n\t    {field_name} = models.BigIntegerField("
         elif 'varchar' in field_type or 'char' in field_type:
-            model_text += f"\n    {field_name} = models.CharField({size})"
+            model_text += f"\n\t    {field_name} = models.CharField({size}"
+        elif 'time' in field_type and not ('datetime' in field_type or 'timestamp' in field_type):
+            model_text += f"\n\t    {field_name} = models.TimeField("    
         elif 'text' in field_type or 'tinytext' in field_type or 'mediumtext' in field_type or 'longtext' in field_type:
             if 'tinytext' in field_type:
-                model_text += f"\n    {field_name} = models.CharField(max_length=255)"
+                model_text += f"\n\t    {field_name} = models.CharField({size}"
             else:
-                model_text += f"\n    {field_name} = models.TextField()"
+                model_text += f"\n\t    {field_name} = models.TextField("
         elif 'date' in field_type:
-            model_text += f"\n    {field_name} = models.DateField()"
+            model_text += f"\n\t    {field_name} = models.DateField("
         elif 'datetime' in field_type or 'timestamp' in field_type:
-            model_text += f"\n    {field_name} = models.DateTimeField()"
+            model_text += f"\n\t    {field_name} = models.DateTimeField("
         elif 'float' in field_type or 'double' in field_type:
-            model_text += f"\n    {field_name} = models.FloatField()"
+            model_text += f"\n\t    {field_name} = models.FloatField("
         elif 'decimal' in field_type:
-            model_text += f"\n    {field_name} = models.DecimalField(max_digits=10, decimal_places=2)"
+            model_text += f"\n\t    {field_name} = models.DecimalField(max_digits=10, decimal_places=2"
         elif 'bool' in field_type:
-            model_text += f"\n    {field_name} = models.BooleanField()"
+            model_text += f"\n\t    {field_name} = models.BooleanField("
         elif 'enum' in field_type or 'set' in field_type:
             enum_values = re.findall(r"'\w+'", field_type)
             enum_values = [value.strip("'") for value in enum_values]
             choices = ", ".join([f"('{value}', '{value}')" for value in enum_values])
-            model_text += f"\n    {field_name} = models.CharField(choices=[{choices}], max_length=255)"
+            model_text += f"\n\t    {field_name} = models.CharField(choices=[{choices}],{size}"
         elif 'binary' in field_type or 'varbinary' in field_type or 'bit' in field_type or 'blob' in field_type or 'tinyblob' in field_type or 'mediumblob' in field_type or 'longblob' in field_type:
-            model_text += f"\n    {field_name} = models.BinaryField()"
+            model_text += f"\n\t    {field_name} = models.BinaryField("
         elif 'json' in field_type:
-            model_text += f"\n    {field_name} = models.JSONField()"
+            model_text += f"\n\t    {field_name} = models.JSONField("
         elif 'geometry' in field_type:
-            model_text += f"\n    {field_name} = models.GeometryField()"
+            model_text += f"\n\t    {field_name} = models.GeometryField("
         elif 'point' in field_type:     
-            model_text += f"\n    {field_name} = models.PointField()"
+            model_text += f"\n\t    {field_name} = models.PointField("
         elif 'linestring' in field_type:
-            model_text += f"\n    {field_name} = models.LineStringField()"
+            model_text += f"\n\t    {field_name} = models.LineStringField("
         elif 'polygon' in field_type:
-            model_text += f"\n    {field_name} = models.PolygonField()"
+            model_text += f"\n\t    {field_name} = models.PolygonField("
         elif 'multipoint' in field_type:
-            model_text += f"\n    {field_name} = models.MultiPointField()"
+            model_text += f"\n\t    {field_name} = models.MultiPointField("
         elif 'multilinestring' in field_type:
-            model_text += f"\n    {field_name} = models.MultiLineStringField()"
+            model_text += f"\n\t    {field_name} = models.MultiLineStringField("
         elif 'multipolygon' in field_type:
-            model_text += f"\n    {field_name} = models.MultiPolygonField()"
+            model_text += f"\n\t    {field_name} = models.MultiPolygonField("
         elif 'uuid' in field_type:
-            model_text += f"\n    {field_name} = models.UUIDField()"
+            model_text += f"\n\t    {field_name} = models.UUIDField("
         else:
-            model_text += f"\n    {field_name} = models.CharField(max_length=255)"
+            model_text += f"\n\t    {field_name} = models.CharField({size}"
 
-    model_text += "\n    date_created = models.DateField(auto_now_add=True)\n"
+        last = model_text[-1]
+        if last == '(':
+            model_text += f"{default})"
+        else:
+            model_text += f",{default})"
 
-    model_text += """
-    def clean(self):
-       if self.xxxx =='':
-          raise ValidationError('The xxx field cannot be empty.')
+        model_text = model_text.replace(",,",",") 
 
-    """
+    model_text += "\n\t    date_created = models.DateField(auto_now_add=True)\n"
+
+    model_text += "\n\t    def clean(self):\n\t\tif self.xxxx == '':\n\t\t\traise ValidationError('The xxx field cannot be empty.')"
+
 
     return HttpResponse(model_text, content_type='text/plain')
 
@@ -192,7 +220,7 @@ def get_save(request):
         view_text += f"        {field_name} = request.POST.get('{field_name}')\n"
 
     view_text += "\n"
-    view_text += f"        if id:\n"
+    view_text += f"        if id and id.isdigit():\n"
     view_text += f"            obj_{table_name} =  get_object_or_404({table_name_capitalized},id=id)\n"
     view_text += f"        else:\n"
     view_text += f"            obj_{table_name} = {table_name_capitalized}()\n\n"

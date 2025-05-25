@@ -93,6 +93,13 @@
     autofocus: true,
     extraKeys: { "Ctrl-Space": "autocomplete" }
   });
+
+  editor.on("keydown", function(cm, event) {
+  if (event.key === "F9") {
+    event.preventDefault();    
+    exec_sql();
+  }
+});
 </script>
 
 

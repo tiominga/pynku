@@ -48,8 +48,7 @@ function exec_sql(sql){
     })
     .then(response => response.json())  
     .then(data => {        
-        const tableHtml = data.html; 
-        console.log(tableHtml); // Log the HTML to the console for debugging               
+        const tableHtml = data.html;         
         document.getElementById('query-result').innerHTML = tableHtml;
 
         let editor_text = editor.getValue();
@@ -63,4 +62,15 @@ function exec_sql(sql){
         console.error('Error:', error);
     });
        
+    }
+
+    function run(e){
+        alert('1');
+        if (e.key === "F9"){
+
+            alert('oi');
+
+        }
+
+
     }
