@@ -66,6 +66,8 @@ function connection_new(){
 
     f_orm = document.getElementById('form_connection');    
     f_orm.reset();
+    document.getElementById('id').value = '';
+
     document.getElementById('project_add').style.display = 'block';
     document.getElementById('project_add_combo').style.display = 'none';
 
@@ -84,10 +86,17 @@ function connection_change(id){
         document.getElementById('user').value = data.user;  
         document.getElementById('password').value = data.password;
         document.getElementById('database').value = data.database;
-        document.getElementById('id').value = data.id;
+        document.getElementById('id').value = data.id;  
+        
+        if (document.getElementById('password').value.length > 0){
+            document.getElementById('save_password').checked = true;
+        }else{
+            document.getElementById('save_password').checked = false;
+        }
 
     }
 
+     
 }
 
 function connection_list(){
